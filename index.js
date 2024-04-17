@@ -24,18 +24,20 @@ app.get("/api/:date?", (req,res) => {
   if(!dateString){
     let date = new Date();
     return res.json({
-      "unix":date.valueOf(),
-      "utc":date.toUTCString(),
+      unix :date.valueOf(),
+      utc :date.toUTCString(),
     })
   }
-  if(dateString.length > 10){
+  //A 4 digit number is a valid ISO-8601 for the beginning of that year
+  //5 digits or more must be a unix time, until we reach a year 10,000 problem
+  if (/\d{5,}/.test(dateString)) {
     
     let parsedDate = parseInt(dateString)
-    let date = new Date(parsedDate).toUTCString();
+    let date = new Date(parsedDate);
     
     return res.json({
-      "unix":dateString,
-      "utc":date,
+      unix:date.valueOf(),
+      utc:date.toUTCString(),
     })
   }
  
